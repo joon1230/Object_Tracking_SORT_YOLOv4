@@ -3,14 +3,7 @@ from __future__ import print_function
 import os
 import numpy as np
 import matplotlib
-
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from skimage import io
-
-import glob
-import time
+import cv2
 import argparse
 from filterpy.kalman import KalmanFilter
 
@@ -282,6 +275,50 @@ tracker_test = Sort( max_age = max_age,
                      min_hits = min_hits,
                      iou_threshold = iou_threshold )
 
+
+
+#%%
+for_car = "D:/VIDEO/car/test/2.mkv"
+cap = cv2.VideoCapture(for_car)
+
+print(cap.get( cv2.CAP_PROP_FRAME_HEIGHT ))
+_ , frame = cap.read()
+import time
+cnt = 0
+f = 0
+while cap.isOpened():
+    ret , frame = cap.read()
+    cnt += 1
+    if not ret:
+        break
+
+    if cnt % 6 != 0:
+        f += 1
+        try:
+            dets = np.hstack([boxes[f][0], boxes[f][1].reshape(-1, 1)])
+        except:
+            pass
+        trackers = tracker_test.update(dets)
+
+        for d in trackers:
+            print(frame, d[4], d[:4])
+            d = d.astype(np.int32)
+            p1 = d[1], d[0]
+            p2 = d[3] , d[2]
+            cv2.rectangle( frame , p1 , p2 , ( 14 , 255 , 0 ) , 1 )
+            cv2.putText( frame, str(d[4]) , p1 , cv2.FONT_HERSHEY_DUPLEX , 1, (0,0,0) )
+        cv2.imshow('asjksadk', frame)
+
+        # time.sleep(10)
+
+    if cv2.waitKey(1) == 27:
+        break
+
+
+cv2.destroyAllWindows()
+cap.release() # ram할당 제거
+
+
 #%%
 total_frames = 0
 
@@ -293,14 +330,5 @@ for frame in range(len(boxes)):
     trackers = tracker_test.update(dets)
 
     for d in trackers:
-        print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (frame, d[4], d[0], d[1], d[2] - d[0], d[3] - d[1]) )
-
-
-
-#%%
-
-
-
-#%%
-
-[1,2,3] + [2]
+#        print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (frame, d[4], d[0], d[1], d[2] - d[0], d[3] - d[1]) )
+        print( frame , d[4] , d[:4])
