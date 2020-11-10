@@ -267,8 +267,8 @@ with open( "data/boxes.pickle" , 'rb' ) as f:
 boxes
 
 # sort tracker 객체 소환
-max_age =  3
-min_hits =  4
+max_age =  10
+min_hits =  6
 iou_threshold = 0.3
 
 tracker_test = Sort( max_age = max_age,
