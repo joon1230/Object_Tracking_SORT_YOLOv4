@@ -2,6 +2,9 @@
 
 ## sort study!
 
-is origin by https://github.com/abewley/sort
+origin - https://github.com/abewley/sort
 
-reference https://arxiv.org/abs/1602.00763
+reference - https://arxiv.org/abs/1602.00763
+
+
+## 

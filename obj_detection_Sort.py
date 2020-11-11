@@ -355,7 +355,7 @@ SCORE_THRESHOLD = 0.2  # model score threshold
 INPUT_SIZE =  416  # resize_img
 
 
-# 영상 불러오
+# 영상 불러오기
 
 for_car = "D:/VIDEO/car/test/F18003_3_202010210745.avi"
 cap = cv2.VideoCapture(for_car)
