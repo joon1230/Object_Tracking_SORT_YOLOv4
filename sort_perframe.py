@@ -5,6 +5,7 @@ import numpy as np
 import os
 ### 현재 실행되는 python 파일의 위치 입력
 os.chdir( "C:/Users/user/workdiratory/SORT" )
+
 import sort_lib.SORT as SORT
 import cv2
 
@@ -21,7 +22,7 @@ tracker_test = SORT.Sort( max_age = max_age,
 
 
 # load_video
-for_car = "D:/VIDEO/car/test/F18003_3_202010210745.avi"
+for_car = "data/F18003_3_202010210745.avi"
 
 # video 정보
 cap = cv2.VideoCapture(for_car)

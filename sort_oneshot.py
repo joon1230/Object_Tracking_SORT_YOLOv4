@@ -15,7 +15,7 @@ import cv2
 #%%
 
 # 비교를 위한 입력 비디오
-VIDEO = "D:/VIDEO/car/test/F18003_3_202010210745.avi"
+VIDEO = "data/F18003_3_202010210745.avi"
 cap = cv2.VideoCapture(VIDEO)
 
 print(cap.get( cv2.CAP_PROP_FRAME_HEIGHT ))
@@ -42,7 +42,7 @@ $$boxes$$
 
 
 # 프레임별 탐지된 모든 객체 박스 정보 불러오기
-with open( "yolo_dectetion_dong.pickle" , 'rb' ) as f:
+with open( "data/yolo_dectetion_dong.pickle" , 'rb' ) as f:
     boxes = pickle.load(f )
 
 # sort tracker 객체 호출
