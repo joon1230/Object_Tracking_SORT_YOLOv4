@@ -77,8 +77,8 @@ while cap.isOpened():
         for d in trackers:
             # print(frame, d[4], d[:4])
             d = d.astype(np.int32)
-            p1 = d[1], d[0]
-            p2 = d[3] , d[2]
+            p1 = d[0], d[1]
+            p2 = d[2] , d[3]
             cv2.rectangle( frame , p1 , p2 , ( 14 , 255 , 0 ) , 1 )
             cv2.putText( frame , str(d[4]) , p1 , cv2.FONT_HERSHEY_DUPLEX , 1, (0,0,0) )
 
