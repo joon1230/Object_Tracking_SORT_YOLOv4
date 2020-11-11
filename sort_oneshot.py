@@ -141,7 +141,6 @@ total_frames = 0
 
 start = time.time()
 for frame in range(len(boxes)):
-    print( type(boxes[frame][0]) , type(boxes[frame][1]) )
     # dets = np.hstack([boxes[frame][0], boxes[frame][1].reshape(-1,1)])
     dets = boxes[frame]
     frame += 1
@@ -149,6 +148,5 @@ for frame in range(len(boxes)):
     trackers = tracker_test.update(dets)
 
     for d in trackers:
-#        print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (frame, d[4], d[0], d[1], d[2] - d[0], d[3] - d[1]) )
-        print( frame , d[4] , d[:4])
+        print( f"frame : {frame} , tracker_id : {int(d[4])} ,  points : {d[:4]}")
 print( time.time() - start )
