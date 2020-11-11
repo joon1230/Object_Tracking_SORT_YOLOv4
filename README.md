@@ -23,3 +23,8 @@ To run the tracker with the provided detections:
 sort_oneshot.py 식별된 영상 tracking
 sort_realtime.py  realtime detecting & tracking
 ```
+
+sort_oneshot.py : 영상내에서 매 프레임별로 탐지된 모든 객체의 정보가 저장된 파일을 기반으로 tracking
+따라서 매 프레임 별로 식별된 객체 박스정보가 다 담긴 list 형태의 파일이 필요합니다.
+
+sort_realtime.py : 영상을 받아 매프레임 별로 detecting과 tracking을 실시합니다. detection 부분이 필요합니다 추가 보강중..
