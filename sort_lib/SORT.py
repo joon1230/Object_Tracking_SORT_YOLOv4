@@ -7,14 +7,14 @@ np.random.seed(0)
 
 
 def linear_assignment(cost_matrix):
-    try:
-        import lap
-        _, x, y = lap.lapjv(cost_matrix, extend_cost=True)
-        return np.array([[y[i], i] for i in x if i >= 0])  #
-    except ImportError:
-        from scipy.optimize import linear_sum_assignment
-        x, y = linear_sum_assignment(cost_matrix)
-        return np.array(list(zip(x, y)))
+    #try:
+     #   import lap
+      #  _, x, y = lap.lapjv(cost_matrix, extend_cost=True)
+       # return np.array([[y[i], i] for i in x if i >= 0])  #
+    #except ImportError:
+    from scipy.optimize import linear_sum_assignment
+    x, y = linear_sum_assignment(cost_matrix)
+    return np.array(list(zip(x, y)))
 
 
 def iou_batch(bb_test, bb_gt):
@@ -97,6 +97,7 @@ class KalmanBoxTracker(object):
         self.hits = 0
         self.hit_streak = 0
         self.age = 0
+        self.label = bbox[-1]
 
     def update(self, bbox):
         """
@@ -212,10 +213,10 @@ class Sort(object):
                                                                                    self.iou_threshold)  # tracker update!!!
         # update matched trackers with assigned detections
         for m in matched:
-            print( self.trackers[m[1]].kf.x )
+            #print( self.trackers[m[1]].kf.x )
             self.trackers[m[1]].update(dets[m[0], :])
             #$$$
-            print( self.trackers[m[1]]  ,dets[m[0], :] )
+            #print( self.trackers[m[1]]  ,dets[m[0], :] )
             #$$$
 
         # create and initialise new trackers for unmatched detections
@@ -226,13 +227,15 @@ class Sort(object):
         for trk in reversed(self.trackers):
             d = trk.get_state()[0]
             if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
-                ret.append(np.concatenate((d, [trk.id + 1])).reshape(1, -1))  # +1 as MOT benchmark requires positive
+                #$$
+                ret.append(np.concatenate((d, np.array([trk.id + 1 ,trk.label]) )).reshape(1, -1))  # +1 as MOT benchmark requires positive
+                #$$
             i -= 1
             # remove dead trackers
             if (trk.time_since_update > self.max_age):
                 #$$$$
                 remove = self.trackers.pop(i)
-                print(remove)
+              # print(remove)
                 #$$$$
         if (len(ret) > 0):
             return np.concatenate(ret)
