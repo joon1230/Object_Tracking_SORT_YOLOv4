@@ -42,7 +42,7 @@ $$boxes$$
 
 
 # 프레임별 탐지된 모든 객체 박스 정보 불러오기
-with open( "data/yolo_dectetion_dong.pickle" , 'rb' ) as f:
+with open( "data/yolo_dectetion_label.pickle" , 'rb' ) as f:
     boxes = pickle.load(f )
 
 # sort tracker 객체 호출
@@ -76,60 +76,60 @@ trackers 안의 개별 객체 d는 [ x1 , y1 , x2, y2 , tracker_id ] 로 저장�
 tracking 결과가 보여집니다~ 
 
 """
-
-_ , frame = cap.read()
+#
+# _ , frame = cap.read()
 import time
-cnt = 0
-f = 0
-start = time.time()
-while cap.isOpened():
-    ret , frame = cap.read()
-    cnt += 1
-    if not ret:
-        break
-
-    if cnt < 5:
-        pass
-    elif cnt % 2 != 0: # interval_frame 프레임 간격
-        f += 1
-        try:
-            """
-            입력 데이터 입니다~
-            """
-            # dets = np.hstack([boxes[f][0], boxes[f][1].reshape(-1, 1)])
-            dets = boxes[f]
-        except:
-            pass
-        """
-        tracker 갱신 구간 입니다.
-        """
-        trackers = tracker_test.update(dets)
-
-
-        """
-        갱신된 tracker 들을 보여주는 부분입니다~~
-        """
-        for d in trackers:
-            print(frame, d[4], d[:4])
-            d = d.astype(np.int32)
-            p1 = d[0], d[1]
-            p2 = d[2] , d[3]
-            cv2.rectangle( frame , p1 , p2 , ( 3 , 51 , 121 ) , 2 )
-            cv2.putText( frame, str(d[4]) , p1 , cv2.FONT_HERSHEY_DUPLEX , 1, (0,0,0) )
-
-        cv2.imshow('tracking', frame)
-        out.write(frame)
-
-        # time.sleep(10)
-
-    if cv2.waitKey(1) == 27:
-        break
-
-
-cv2.destroyAllWindows()
-cap.release()
-
-print( time.time() - start )
+# cnt = 0
+# f = 0
+# start = time.time()
+# while cap.isOpened():
+#     ret , frame = cap.read()
+#     cnt += 1
+#     if not ret:
+#         break
+#
+#     if cnt < 5:
+#         pass
+#     elif cnt % 2 != 0: # interval_frame 프레임 간격
+#         f += 1
+#         try:
+#             """
+#             입력 데이터 입니다~
+#             """
+#             # dets = np.hstack([boxes[f][0], boxes[f][1].reshape(-1, 1)])
+#             dets = boxes[f]
+#         except:
+#             pass
+#         """
+#         tracker 갱신 구간 입니다.
+#         """
+#         trackers = tracker_test.update(dets)
+#
+#
+#         """
+#         갱신된 tracker 들을 보여주는 부분입니다~~
+#         """
+#         for d in trackers:
+#             print(frame, d[4], d[:4])
+#             d = d.astype(np.int32)
+#             p1 = d[0], d[1]
+#             p2 = d[2] , d[3]
+#             cv2.rectangle( frame , p1 , p2 , ( 3 , 51 , 121 ) , 2 )
+#             cv2.putText( frame, str(d[4]) , p1 , cv2.FONT_HERSHEY_DUPLEX , 1, (0,0,0) )
+#
+#         cv2.imshow('tracking', frame)
+#         out.write(frame)
+#
+#         # time.sleep(10)
+#
+#     if cv2.waitKey(1) == 27:
+#         break
+#
+#
+# cv2.destroyAllWindows()
+# cap.release()
+#
+# print( time.time() - start )
 
 
 #%%

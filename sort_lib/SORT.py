@@ -212,7 +212,11 @@ class Sort(object):
                                                                                    self.iou_threshold)  # tracker update!!!
         # update matched trackers with assigned detections
         for m in matched:
+            print( self.trackers[m[1]].kf.x )
             self.trackers[m[1]].update(dets[m[0], :])
+            #$$$
+            print( self.trackers[m[1]]  ,dets[m[0], :] )
+            #$$$
 
         # create and initialise new trackers for unmatched detections
         for i in unmatched_dets:
@@ -226,7 +230,10 @@ class Sort(object):
             i -= 1
             # remove dead trackers
             if (trk.time_since_update > self.max_age):
-                self.trackers.pop(i)
+                #$$$$
+                remove = self.trackers.pop(i)
+                print(remove)
+                #$$$$
         if (len(ret) > 0):
             return np.concatenate(ret)
         return np.empty((0, 5))
