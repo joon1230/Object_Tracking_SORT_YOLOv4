@@ -207,9 +207,9 @@ class Sort(object):
         trks = np.ma.compress_rows(np.ma.masked_invalid(trks))  ## 헝가리안을 쓰니??
         for t in reversed(to_del):
             self.trackers.pop(t)
+        # tracker update : return tracker's index!!
         matched, unmatched_dets, unmatched_trks = associate_detections_to_trackers(dets, trks,
                                                                                    self.iou_threshold)  # tracker update!!!
-
         # update matched trackers with assigned detections
         for m in matched:
             self.trackers[m[1]].update(dets[m[0], :])
@@ -224,7 +224,7 @@ class Sort(object):
             if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
                 ret.append(np.concatenate((d, [trk.id + 1])).reshape(1, -1))  # +1 as MOT benchmark requires positive
             i -= 1
-            # remove dead tracklet
+            # remove dead trackers
             if (trk.time_since_update > self.max_age):
                 self.trackers.pop(i)
         if (len(ret) > 0):
