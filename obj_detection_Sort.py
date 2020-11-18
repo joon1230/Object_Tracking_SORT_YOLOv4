@@ -7,7 +7,7 @@ from tensorflow.python.saved_model import tag_constants
 
 # 모델경로 설정
 
-MODEL_PATH ='checkpoints/yolov4-416'
+MODEL_PATH ='checkpoints/yolov4-608'
 
 ## yolov4-tiny-416 // tiny mode
 
@@ -16,11 +16,8 @@ MODEL_PATH ='checkpoints/yolov4-416'
 saved_model_loaded = tf.saved_model.load( MODEL_PATH , tags = [tag_constants.SERVING])
 infer = saved_model_loaded.signatures['serving_default']
 
-IOU_THRESHOLD = 0.001
 
 
-SCORE_THRESHOLD = 0.001
-INPUT_SIZE = 416
 
 #%%
 
@@ -97,11 +94,11 @@ fps = cap.get(cv2.CAP_PROP_FPS) # 또는 cap.get(5)
 
 
 # 객체 인식 임계점 설정
-IOU_THRESHOLD = 0.07  # IOU threshold
-SCORE_THRESHOLD = 0.2  # model score threshold
+IOU_THRESHOLD = 0.3  # IOU threshold
+SCORE_THRESHOLD = 0.5  # model score threshold
 
 # input size 는 고정
-INPUT_SIZE =  416  # resize_img
+INPUT_SIZE =  608  # resize_img
 image_w = width
 image_h = height
 display = True
