@@ -29,8 +29,8 @@ requirements.txt 참고
 ### Demo:
 To run the tracker with the provided detections:
 ```
-sort_oneshot.py 식별된 영상 tracking
-obj_detection_Sort.py  realtime detecting & tracking
+$ python sort_oneshot.py 식별된 영상 tracking
+# python obj_detection_Sort.py  realtime detecting & tracking
 ```
 
 sort_oneshot.py : 탐지된 박스 정보를 가지고 객체 추적
