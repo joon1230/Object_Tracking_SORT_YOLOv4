@@ -35,7 +35,7 @@ $ python sort_oneshot.py
 
 To run object detection YOLOv4( 608 ) :
 ```
-$ python obj_detection_yolo
+$ python obj_detection_yolo.py
 ```
 
 To run Yolov4 + tracker
