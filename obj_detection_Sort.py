@@ -5,14 +5,10 @@ import tensorflow as tf
 from tensorflow.python.saved_model import tag_constants
 
 
-# 모델경로 설정
-
+# model path
 MODEL_PATH ='checkpoints/yolov4-608'
 
-## yolov4-tiny-416 // tiny mode
-
-
-# 내부 모델 불러오기
+# import weights
 saved_model_loaded = tf.saved_model.load( MODEL_PATH , tags = [tag_constants.SERVING])
 infer = saved_model_loaded.signatures['serving_default']
 
@@ -24,10 +20,9 @@ infer = saved_model_loaded.signatures['serving_default']
 def yolo ( img ):
     img_input = cv2.resize(img, (INPUT_SIZE, INPUT_SIZE) , )
     img_input = img_input / 255
-    # cv2.imshow('asd', img_input)
     img_input = img_input[np.newaxis, ...].astype(np.float32)
 
-    # yolov4 기반 학습된 모델을 바탕으로 객체 후보군 선정
+    # yolov4 infer
     img_input = tf.constant(img_input)
     pred_bbox = infer(img_input)
 
@@ -49,18 +44,19 @@ def yolo ( img ):
         iou_threshold=IOU_THRESHOLD,
         score_threshold=SCORE_THRESHOLD
     )
-    # 선정된 box 저장하기
+    # boxes_dots, class_score, class, ..
     pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
     return pred_bbox
 
 
 #%%
 import sort_lib.SORT as SORT
-# sort tracker 객체 소환
+# sort tracker parameter
 max_age =  40
 min_hits =  1
 iou_threshold = 0.01
 
+# Sort tracker initiation
 tracker_test = SORT.Sort( max_age = max_age,
                      min_hits = min_hits,
                      iou_threshold = iou_threshold )
@@ -68,48 +64,43 @@ tracker_test = SORT.Sort( max_age = max_age,
 
 
 #%%
-
-
 import cv2
 import numpy as np
 import time
 
 
-# 영상 불러오기
-
+# load_video
 for_car = "data/F18003_3_202010210745.avi"
-
 cap = cv2.VideoCapture(for_car)
 
-print(cap.get( cv2.CAP_PROP_FRAME_HEIGHT ))
-_ , frame = cap.read()
-
-cnt = 0
-boxes = []
-
-width = cap.get(cv2.CAP_PROP_FRAME_WIDTH) # 또는 cap.get(3)
-height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) # 또는 cap.get(4)
-fps = cap.get(cv2.CAP_PROP_FPS) # 또는 cap.get(5)
-
-
-
-# 객체 인식 임계점 설정
+# YOLO_parameter
 IOU_THRESHOLD = 0.3  # IOU threshold
 SCORE_THRESHOLD = 0.5  # model score threshold
+INPUT_SIZE =  608 # resize image_size
 
-# input size 는 고정
-INPUT_SIZE =  608  # resize_img
+# initiate_params
+cnt = 0
+boxes = []
+start_time = time.time()
+
+# video_info
+width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+fps = cap.get(cv2.CAP_PROP_FPS)
+print('frame_width : %d, frame_height : %d, fps : %d' %(width, height, fps))
+_ , frame = cap.read()
+
+# resize_img
 image_w = width
 image_h = height
+
+# display flag
 display = True
 
-
-# 저장하여 보자
+# generate save_objects
 fourcc = cv2.VideoWriter_fourcc(*'DIVX') # 코덱 정의
 out = cv2.VideoWriter('res.avi', fourcc, fps, (int(image_w), int(image_h)))
-print('frame_width : %d, frame_height : %d, fps : %d' %(width, height, fps))
 
-start_time = time.time()
 
 while cap.isOpened():
     ret , frame = cap.read()
@@ -118,8 +109,6 @@ while cap.isOpened():
         break
 
     if True:
-        # cv2.imshow('asjksadk' , frame )
-        #frame = cv2.resize(frame, ( image_w , image_h ))
         tmp_frame = frame.copy()
         dot = yolo( tmp_frame )
         num_class = dot[3][0]
@@ -133,15 +122,14 @@ while cap.isOpened():
             d_[2] = int(d_[2] * image_h)
 
 
-        ## 사람 가리기
+        # select vehicle class
         not_person = dot[2] != 0
         dets = np.hstack([dot[0][not_person], dot[2][not_person].reshape(-1, 1)])
         trackers = tracker_test.update(dets)
 
+        # tracking_obj
         for d in trackers:
-            # print(frame, d[4], d[:4])
             d = d.astype(np.int32)
-
             p1 = d[1], d[0]
             p2 = d[3] , d[2]
             cv2.rectangle( frame , p1 , p2 , ( 3 , 51 , 121 ) , 4 )
@@ -150,9 +138,6 @@ while cap.isOpened():
             cv2.imshow('yolo' , frame )
         out.write(frame)
         print(cnt , end = '\r')
-
-
-        # time.sleep(10)
 
     if cv2.waitKey(1) == 27:
         break
