@@ -4,14 +4,13 @@ import time
 import os
 os.chdir(os.path.dirname(__file__))
 from shapely.geometry import LineString
-from xml.etree.ElementTree import Element, SubElement, ElementTree
 import datetime
 import sort_lib.SORT as SORT
 
 #%%
 
 # assign GPU
-# os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 
 import tensorflow as tf
@@ -87,50 +86,6 @@ def point_in_border(point, pts):
     else:
         return True
 
-
-# create XML
-root = Element('annotations')
-def number(num):
-    return '%03d' % num
-
-def makeXML(id, name, all_object):
-    global root
-
-    image = root.find('image[@id="' + str(number(id)) + '"]')
-    if image is None:
-        image = SubElement(root, 'image')
-        image.attrib["id"] = str(number(id))
-        image.attrib["name"] = name
-        image.attrib["width"] = str(image_w)
-        image.attrib["height"] = str(image_h)
-
-    for i, v in enumerate(all_object):
-        box = SubElement(image, 'box')
-        box.attrib["label"] = cls_xml.get(int(v[4]) , "승용/승합")
-        box.attrib["occluded"] = '0'
-        box.attrib["source"] = 'manual'
-
-        box.attrib["xtl"] = str(v[1])
-        box.attrib["ytl"] = str(v[0])
-        box.attrib["xbr"] = str(v[3])
-        box.attrib["ybr"] = str(v[2])
-
-
-def apply_indent(elem, level=0):
-    # tab = space * 2
-    indent = "\n" + level * "  "
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = indent + "  "
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = indent
-        for elem in elem:
-            apply_indent(elem, level + 1)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = indent
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = indent
 
 #%%
 import cv2
@@ -279,7 +234,7 @@ while cap.isOpened():
         break
 
 
-
+print( f"{(time.time() - start_time) / 60} min" )
 print( "\n\n\n" )
 out.release()
 cap.release()
