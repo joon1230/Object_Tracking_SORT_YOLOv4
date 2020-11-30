@@ -26,14 +26,20 @@ numpy
 requirements.txt 참고
 ```
 
+
 ### Demo:
 To run the tracker with the provided detections:
 ```
 $ python sort_oneshot.py
 ```
 
+To run object detection YOLOv4( 608 ) :
+```
+$ python obj_detection_yolo
+```
+
 To run Yolov4 + tracker
 ```
-$ python obj_detection_Sort.py  // realtime detecting & tracking ( demo )
+$ python YOLO_Sort.py  // realtime detecting & tracking ( demo )
 ```
 
