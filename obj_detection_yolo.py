@@ -131,7 +131,7 @@ pts = np.array([[295,25],
 
 
 # path info
-save_path = ""
+save_path = "output"
 video_path = "data/test.avi"
 
 # init params
@@ -154,7 +154,7 @@ display = DISPLAY
 
 # generate save_objects
 fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-out = cv2.VideoWriter( os.path.join( save_path, "res.avi") , fourcc, int(fps), (int(image_w), int(image_h)))
+out = cv2.VideoWriter( os.path.join( save_path, "res_yolo.avi") , fourcc, int(fps), (int(image_w), int(image_h)))
 
 # check time
 start_time = time.time()

@@ -26,7 +26,7 @@ width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
 height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 fps = cap.get(cv2.CAP_PROP_FPS)
 fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-out = cv2.VideoWriter('res.avi', fourcc, fps, (int(width), int(height)))
+out = cv2.VideoWriter('output/res_only_Sort.avi', fourcc, fps, (int(width), int(height)))
 
 
 #%%
