@@ -4,13 +4,15 @@ import time
 import os
 os.chdir(os.path.dirname(__file__))
 from shapely.geometry import LineString
-import datetime
 import sort_lib.SORT as SORT
 
 #%%
 
 # assign GPU
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+try:
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+except:
+    print('NO GPU')
 
 
 import tensorflow as tf
@@ -98,10 +100,8 @@ IOU_THRESHOLD = 0.3  # IOU threshold
 SCORE_THRESHOLD = 0.3  # model score threshold
 INPUT_SIZE =  608  # resize_img
 
-# camera path / camera_name, camera path
-camera_id = "F20010_3"
-
 # CONSTANCE
+SAMPLE_FRAME = 2000
 RESIZE_RATIO = 1
 DISPLAY = False
 with open( 'checkpoints/coco.names' , 'r' ) as f:
@@ -111,15 +111,6 @@ cls_xml = { 2:'승용/승합', 5:"버스", 7:"화물/기타", 3:"이륜차",  6:
 cls_color = { 2: (255,204,92) , 5 : (255,111,105) , 7 : (150,206,180) ,
               3 : (66,139,202) , 6 : (255,111,105), 1 : (66,139,202) }
 
-# init
-n = datetime.datetime.now()
-log_time = n.strftime('%Y%m%d_%H%M%S')
-errors_video = []
-errors_info = []
-complete = []
-box_cnts = []
-
-
 # angle roi
 pts = np.array([[295,25],
  [295,613],
@@ -128,7 +119,6 @@ pts = np.array([[295,25],
  [1061,342],
  [1022,61]] , dtype = np.int32)
 
-
 # path info
 save_path = "output"
 video_path = "data/test.avi"
@@ -136,8 +126,6 @@ video_path = "data/test.avi"
 # init params
 cnt = 0
 save_cnt = 0
-box_cnt = 0
-boxes = []
 
 # video load & info
 cap = cv2.VideoCapture(video_path)
@@ -175,7 +163,7 @@ while cap.isOpened():
     if not ret:
         break
 
-    if cnt < 2000:
+    if cnt < SAMPLE_FRAME:
         frame = cv2.resize(frame, ( image_w , image_h ))
         tmp_frame = frame.copy()
         dot = yolo( tmp_frame ) # detection by yolo
@@ -193,7 +181,6 @@ while cap.isOpened():
         select_obj = np.isin( dot[2] , [1,2,3,5,7])
 
         # filter boxes
-        dets = np.hstack([dot[0], dot[1].reshape(-1, 1)])
         obj = np.hstack([dot[0][select_obj], dot[2][select_obj].reshape(-1, 1)]).astype(np.int32)
         p2_in = [ point_in_border( o[2:] , pts ) for o in obj]
         p1_in = [ point_in_border( o[0:2] , pts ) for o in obj]
@@ -206,8 +193,6 @@ while cap.isOpened():
                 print("\n\n")
                 print("ERROR!!!!")
                 print(p2_in, p1_in)
-                errors_video.append(video_id)
-                errors_info.append("bite_wise")
                 break
 
         # tracking
@@ -226,7 +211,7 @@ while cap.isOpened():
         if display :
             cv2.imshow('yolo' , frame )
 
-        ## save
+        # save
         out.write(frame)
         save_cnt += 1
         print(cnt , end = '\r')

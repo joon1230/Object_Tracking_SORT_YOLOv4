@@ -1,12 +1,6 @@
--- tracking
 filterpy==1.4.5
-lap==0.4.0 ## 설치가 되지 않을시 무시하여도 무방합니다.
+lap==0.4.0
 scipy
-
--- dectection
 tensorflow==2.3
+shapely
 numpy
-
--- weights
-//yolov4-416
-//yolov4-608

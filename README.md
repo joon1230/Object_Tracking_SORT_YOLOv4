@@ -1,10 +1,11 @@
 
 
-## sort study!
+## 객체 탐지 및 추적 ( Sort + YOLO )
 
 origin - https://github.com/abewley/sort
 
 reference - https://arxiv.org/abs/1602.00763
+
 
 -----
 #### package 요구사항 :
@@ -17,6 +18,7 @@ scipy
 
 -- dectection
 tensorflow==2.3
+shapely
 numpy
 
 -- weights ( for yolov4 )
