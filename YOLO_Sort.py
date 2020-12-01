@@ -129,10 +129,11 @@ save_cnt = 0
 
 # video load & info
 cap = cv2.VideoCapture(video_path)
-width = cap.get(cv2.CAP_PROP_FRAME_WIDTH) # 또는 cap.get(3)
-height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT) # 또는 cap.get(4)
-fps = cap.get(cv2.CAP_PROP_FPS) # 또는 cap.get(5)
-print('frame_width : %d, frame_height : %d, fps : %d' % (width, height, fps))
+width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+fps = cap.get(cv2.CAP_PROP_FPS)
+length = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+print('frame_width : %d, frame_height : %d, fps : %d, total_frame : %d' % (width, height, fps, length ))
 
 # resize img & flag
 image_w = int(width*RESIZE_RATIO)
@@ -214,7 +215,7 @@ while cap.isOpened():
         # save
         out.write(frame)
         save_cnt += 1
-        print(cnt , end = '\r')
+        print(f"progress : {int((cnt / length) * 100)}%",end = '\r')
     else:
         break
 
