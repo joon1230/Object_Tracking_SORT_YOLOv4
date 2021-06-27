@@ -1,7 +1,10 @@
 
 
 ## 객체 탐지 및 추적 ( Sort + YOLO )
+객체 탐지 모델인 yolov4와 객체 추적 알고리즘인 SORT를 활용하여 실시간 객체 탐지 및 추적 project 에 사용한 방법론 입니다.
+도로변의 차량을 식별및 추적을 위해 구현된 코드 입니다.
 
+----- 
 origin - https://github.com/abewley/sort
 
 reference - https://arxiv.org/abs/1602.00763
